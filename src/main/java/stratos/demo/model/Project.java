@@ -26,6 +26,12 @@ public class Project {
 
     private String description;
 
+    @Column(name = "created_by")
+    private Long createdByUserId;
+
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private ProjectStatus status;
