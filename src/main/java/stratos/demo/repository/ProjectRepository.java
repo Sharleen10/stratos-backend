@@ -25,4 +25,15 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             @Param("teamMemberId") Long teamMemberId,
             @Param("startDate") LocalDate startDate,
             @Param("endDate") LocalDate endDate);
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END " +
+            "FROM Project p WHERE p.id = :projectId AND p.createdByUserId = :userId")
+    boolean existsByIdAndCreatedByUserId(@Param("projectId") Long projectId,
+                                         @Param("userId") Long userId);
+
+    @Query("SELECT CASE WHEN COUNT(p) > 0 THEN true ELSE false END " +
+            "FROM Project p JOIN p.teamMembers tm " +
+            "WHERE p.id = :projectId AND tm.id = :userId")
+    boolean existsByIdAndTeamMembersId(@Param("projectId") Long projectId,
+                                       @Param("userId") Long userId);
 }
