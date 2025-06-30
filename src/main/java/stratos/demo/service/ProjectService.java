@@ -3,6 +3,7 @@ package stratos.demo.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import stratos.demo.dto.ProjectDTO;
 import stratos.demo.model.Project;
 import stratos.demo.model.User;
@@ -69,7 +70,7 @@ public class ProjectService {
 
         return projectRepository.findAll(spec, pageable);
     }
-
+    @PreAuthorize("hasRole('MANAGER') or @projectSecurity.isProjectCreator(#projectId, authentication)")
     public Project updateProject(Long id, ProjectDTO projectDTO) {
         Project project = projectRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Project not found"));
