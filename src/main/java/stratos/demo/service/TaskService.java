@@ -3,6 +3,7 @@ package stratos.demo.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.access.prepost.PreAuthorize;
 import stratos.demo.dto.TaskDTO;
 import stratos.demo.model.*;
 import stratos.demo.repository.ProjectRepository;
@@ -71,7 +72,7 @@ public class TaskService {
 
         return taskRepository.findAll(spec, pageable);
     }
-
+    @PreAuthorize("hasRole('MANAGER') or @taskSecurity.isTaskAssignee(#taskId, authentication)")
     public Task updateTask(Long id, TaskDTO taskDTO) {
         Task task = taskRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Task not found"));
