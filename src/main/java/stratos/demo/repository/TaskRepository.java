@@ -32,4 +32,15 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
             @Param("userId") Long userId,
             @Param("from") LocalDate from,
             @Param("to") LocalDate to);
+
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END " +
+            "FROM Task t WHERE t.id = :taskId AND t.assignedUser.id = :userId")
+    boolean existsByIdAndAssignedUserId(@Param("taskId") Long taskId,
+                                        @Param("userId") Long userId);
+
+    @Query("SELECT CASE WHEN COUNT(t) > 0 THEN true ELSE false END " +
+            "FROM Task t JOIN t.project p JOIN p.teamMembers tm " +
+            "WHERE t.id = :taskId AND tm.id = :userId")
+    boolean existsByIdAndProjectTeamMembersId(@Param("taskId") Long taskId,
+                                              @Param("userId") Long userId);
 }
