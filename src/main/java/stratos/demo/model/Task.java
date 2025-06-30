@@ -34,6 +34,16 @@ public class Task {
 
     private LocalDate dueDate;
 
+    @Column(name = "priority")
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
+
+    @Column(name = "estimated_hours")
+    private Double estimatedHours;
+
+    @Column(name = "actual_hours")
+    private Double actualHours;
+
     @ManyToOne
     @JoinColumn(name = "assigned_user_id")
     private User assignedUser;
@@ -45,4 +55,9 @@ public class Task {
     public enum TaskStatus {
         TODO, IN_PROGRESS, DONE, BLOCKED
     }
+
+    public enum TaskPriority{
+        LOW, MEDIUM, HIGH, CRITICAL
+    }
+
 }
